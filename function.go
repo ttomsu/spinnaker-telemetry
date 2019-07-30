@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"cloud.google.com/go/logging"
 )
@@ -61,6 +62,11 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 	logger := client.Logger("spinnaker-log-event", logging.EntryCountThreshold(5))
 	logger.Log(logging.Entry{
 		Payload: sle,
+		Severity: logging.Info,
+		Timestamp: time.Now(),
+		HTTPRequest: &logging.HTTPRequest{
+			Request: r,
+		},
 	})
 	fmt.Fprint(w, "Done.")
 }
