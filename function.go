@@ -15,33 +15,33 @@ var (
 )
 
 type SpinnakerLogEvent struct {
-	Spinnaker     Spinnaker     `json:"spinnaker"`
-	Application   Application   `json:"application"`
-	Pipeline      Pipeline      `json:"pipeline"`
-	Stage         Stage         `json:"stage"`
-	CloudProvider CloudProvider `json:"cloudProvider"`
+	Spinnaker     Spinnaker     `json:"spinnaker,omitempty"`
+	Application   Application   `json:"application,omitempty"`
+	Pipeline      Pipeline      `json:"pipeline,omitempty"`
+	Stage         Stage         `json:"stage,omitempty"`
+	CloudProvider CloudProvider `json:"cloudProvider,omitempty"`
 }
 
 type Spinnaker struct {
-	ID      string `json:"id"`
-	Version string `json:"version"`
+	ID      string `json:"id,omitempty"`
+	Version string `json:"version,omitempty"`
 }
 
 type Application struct {
-	ID string `json:"id"`
+	ID string `json:"id,omitempty"`
 }
 
 type Pipeline struct {
-	ID string `json:"id"`
+	ID string `json:"id,omitempty"`
 }
 
 type Stage struct {
-	Name   string `json:"name"`
-	Status string `json:"status"`
+	Name   string `json:"name,omitempty"`
+	Status string `json:"status,omitempty"`
 }
 
 type CloudProvider struct {
-	ID string `json:"id"`
+	ID string `json:"id,omitempty"`
 }
 
 func LogEvent(w http.ResponseWriter, r *http.Request) {
@@ -62,5 +62,5 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 	logger.Log(logging.Entry{
 		Payload: sle,
 	})
-	fmt.Fprintf(w, "Done.")
+	fmt.Fprint(w, "Done.")
 }
