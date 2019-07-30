@@ -4,8 +4,4 @@ steps:
          'deploy',
          'spinnaker-telemetry',
          '--source',
-         'https://source.developers.google.com/projects/${_PROJECT_ID}/repos/${_REPO_NAME}']
-
-substitutions:
-  _PROJECT_ID: ${PROJECT_ID}
-  _REPO_NAME: ${REPO_NAME}
+         'https://source.developers.google.com/projects/$PROJECT_ID/repos/$REPO_NAME']
