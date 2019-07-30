@@ -49,8 +49,11 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		fmt.Fprint(w, "I'm healthy!")
+		return
 	case http.MethodPost:
 		handlePost(w, r)
+	default:
+		http.Error(w, "405 - Method Not Allowed, punk!", http.StatusMethodNotAllowed)
 	}
 	fmt.Fprint(w, "Done.")
 }
