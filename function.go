@@ -58,8 +58,9 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger := client.Logger("spinnaker-log-event")
+	logger := client.Logger("spinnaker-log-event", logging.EntryCountThreshold(5))
 	logger.Log(logging.Entry{
 		Payload: sle,
 	})
+	fmt.Fprintf(w, "Done.")
 }
