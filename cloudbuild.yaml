@@ -1,0 +1,10 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions',
+         'deploy',
+         'spinnaker-telemetry',
+         '--trigger-http',
+         '--runtime',
+         'go1.11',
+         '--entry-point',
+         'HelloWorld']
