@@ -3,8 +3,5 @@ steps:
   args: ['functions',
          'deploy',
          'spinnaker-telemetry',
-         '--trigger-http',
-         '--runtime',
-         'go111',
-         '--entry-point',
-         'HelloWorld']
+         '--source',
+         'https://source.developers.google.com/projects/ttomsu-dev-spinnaker/repos/spinnaker-telemetry']
