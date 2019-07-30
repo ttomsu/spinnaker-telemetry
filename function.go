@@ -22,5 +22,6 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "Hello World! No message received.")
     return
   }
-  fmt.Fprint(w, html.EscapeString(d.Message))
+
+  fmt.Fprint(w, "I've got nothin'.")
 }
