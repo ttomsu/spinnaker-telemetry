@@ -46,6 +46,16 @@ type CloudProvider struct {
 }
 
 func LogEvent(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		fmt.Fprint(w, "I'm healthy!")
+	case http.MethodPost:
+		handlePost(w, r)
+	}
+	fmt.Fprint(w, "Done.")
+}
+
+func handlePost(w http.ResponseWriter, r *http.Request) {
 	sle := &SpinnakerLogEvent{}
 	if err := json.NewDecoder(r.Body).Decode(sle); err != nil {
 		fmt.Fprintf(w, "Error decoding SpinnakerLogEvent: %v", err)
@@ -68,5 +78,4 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 			Request: r,
 		},
 	})
-	fmt.Fprint(w, "Done.")
 }
