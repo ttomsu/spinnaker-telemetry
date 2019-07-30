@@ -2,26 +2,64 @@
 package p
 
 import (
-  "encoding/json"
-  "fmt"
-  "html"
-  "net/http"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
+
+	"cloud.google.com/go/logging"
 )
 
-// HelloWorld prints the JSON encoded "message" field in the body
-// of the request or "Hello, World!" if there isn't one.
-func HelloWorld(w http.ResponseWriter, r *http.Request) {
-  var d struct {
-    Message string `json:"message"`
-  }
-  if err := json.NewDecoder(r.Body).Decode(&d); err != nil {
-    fmt.Fprintf(w, "Hello World! Error found 1: %v", err)
-    return
-  }
-  if d.Message == "" {
-    fmt.Fprint(w, "Hello World! No message received.")
-    return
-  }
+var (
+	projectID = os.Getenv("GCP_PROJECT")
+)
 
-  fmt.Fprint(w, html.EscapeString(d.Message))
+type SpinnakerLogEvent struct {
+	Spinnaker     Spinnaker     `json:"spinnaker"`
+	Application   Application   `json:"application"`
+	Pipeline      Pipeline      `json:"pipeline"`
+	Stage         Stage         `json:"stage"`
+	CloudProvider CloudProvider `json:"cloudProvider"`
+}
+
+type Spinnaker struct {
+	ID      string `json:"id"`
+	Version string `json:"version"`
+}
+
+type Application struct {
+	ID string `json:"id"`
+}
+
+type Pipeline struct {
+	ID string `json:"id"`
+}
+
+type Stage struct {
+	Name   string `json:"name"`
+	Status string `json:"status"`
+}
+
+type CloudProvider struct {
+	ID string `json:"id"`
+}
+
+func LogEvent(w http.ResponseWriter, r *http.Request) {
+	sle := &SpinnakerLogEvent{}
+	if err := json.NewDecoder(r.Body).Decode(sle); err != nil {
+		fmt.Fprintf(w, "Error decoding SpinnakerLogEvent: %v", err)
+		return
+	}
+
+	// Creates a client.
+	client, err := logging.NewClient(r.Context(), projectID)
+	if err != nil {
+		fmt.Fprintf(w, "could not create logging client: %v", err)
+		return
+	}
+
+	logger := client.Logger("spinnaker-log-event")
+	logger.Log(logging.Entry{
+		Payload: sle,
+	})
 }
