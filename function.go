@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/logging"
+	"spinnaker.io/protos/stats"
 )
 
 var (
@@ -32,8 +33,8 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlePost(w http.ResponseWriter, r *http.Request) {
-	e := &Event{}
-	if err := json.NewDecoder(r.Body).Decode(e); err != nil {
+	event := &stats.Event{}
+	if err := json.NewDecoder(r.Body).Decode(event); err != nil {
 		fmt.Fprintf(w, "Error decoding Event: %v", err)
 		return
 	}
@@ -46,12 +47,13 @@ func handlePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logger := client.Logger("spinnaker-log-event", logging.EntryCountThreshold(5))
-	logger.Log(logging.Entry{
-		Payload: e,
+	entry := logging.Entry{
+		Payload: event,
 		Severity: logging.Info,
 		Timestamp: time.Now(),
 		HTTPRequest: &logging.HTTPRequest{
 			Request: r,
 		},
-	})
+	}
+	logger.Log(entry)
 }
