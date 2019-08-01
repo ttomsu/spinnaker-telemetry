@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package io.spinnaker.stats.v1;
+
+option go_package="stats";
+
+message Event {
+  SpinnakerInstance spinnaker_instance = 1;
+}
+
+message SpinnakerInstance {
+  string id = 1;
+  Application application = 2;
+}
+
+message Application {
+  string id = 1;
+  Pipeline pipeline = 2;
+}
+
+message Pipeline {
+  string id = 1;
+  repeated Stage stages = 2;
+}
+
+message Stage {
+  string id =  1;
+  CloudProvider cloud_provider = 2;
+}
+
+message CloudProvider {
+  string id = 1;
+}
