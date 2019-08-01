@@ -4,6 +4,7 @@ package stats
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -18,9 +19,11 @@ var (
 func LogEvent(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
+		log.Println("Received GET method for ", r.URL)
 		fmt.Fprint(w, "I'm still healthy!")
 		return
 	case http.MethodPost:
+		log.Println("Received POST method for ", r.URL)
 		handlePost(w, r)
 	default:
 		http.Error(w, "405 - Method Not Allowed, punk!", http.StatusMethodNotAllowed)

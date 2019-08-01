@@ -1,4 +1,4 @@
-module spinnaker.io/stats
+module stats
 
 go 1.11
 
