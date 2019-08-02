@@ -22,10 +22,12 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		log.Println("Received GET method for ", r.URL)
-		if m, err := metadata.FromContext(r.Context()); err != nil {
-			fmt.Fprintf(w, "I'm running on GCF! %+v", m)
+		m, err := metadata.FromContext(r.Context())
+		if err != nil {
+			fmt.Fprint(w, "I'm healthy, but probably not running on GCF :-( ", err)
+			return
 		}
-		fmt.Fprint(w, "I'm still healthy!")
+		fmt.Fprintf(w, "I'm running on GCF! %+v", m)
 		return
 	case http.MethodPost:
 		log.Println("Received POST method for ", r.URL)
