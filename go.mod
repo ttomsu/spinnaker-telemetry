@@ -1,10 +1,8 @@
-module stats
+module github.com/spinnaker/stats
 
 go 1.11
 
 require (
 	cloud.google.com/go/logging v1.0.0
-	spinnaker.io/protos/stats v0.0.0
+	github.com/golang/protobuf v1.3.2
 )
-
-replace spinnaker.io/protos/stats v0.0.0 => ./gopath/src/

@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"spinnaker.io/protos/stats"
+	"github.com/spinnaker/stats"
 )
 
 var port = flag.Int("port", 8080, "")

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.spinnaker.protos.stats;
 
-option go_package = "spinnaker.io/protos/stats";
+option go_package = "stats";
 
 message Event {
   SpinnakerInstance spinnaker_instance = 1;
