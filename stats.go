@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/logging"
+	"cloud.google.com/go/functions/metadata"
 	"github.com/spinnaker/stats/proto"
 )
 
@@ -21,6 +22,9 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		log.Println("Received GET method for ", r.URL)
+		if m, err := metadata.FromContext(r.Context()); err != nil {
+			fmt.Fprintf(w, "I'm running on GCF! %+v", m)
+		}
 		fmt.Fprint(w, "I'm still healthy!")
 		return
 	case http.MethodPost:
