@@ -1,4 +1,4 @@
-module github.com/spinnaker
+module github.com/spinnaker/stats
 
 go 1.11
 
