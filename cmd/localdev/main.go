@@ -12,6 +12,8 @@ import (
 var port = flag.Int("port", 8080, "")
 
 func main() {
+	flag.Parse()
+
 	http.HandleFunc("/", stats.LogEvent)
 	log.Println("Listening on port ", *port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", *port), nil))

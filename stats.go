@@ -2,8 +2,8 @@
 package stats
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/golang/protobuf/jsonpb"
 	"log"
 	"net/http"
 	"os"
@@ -34,10 +34,14 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 
 func handlePost(w http.ResponseWriter, r *http.Request) {
 	event := &proto.Event{}
-	if err := json.NewDecoder(r.Body).Decode(event); err != nil {
-		fmt.Fprintf(w, "Error decoding Event: %v", err)
+	um := &jsonpb.Unmarshaler{AllowUnknownFields: true}
+
+	defer r.Body.Close()
+	if err := um.Unmarshal(r.Body, event); err != nil {
+		fmt.Fprintf(w, "Error unmarshalling Event: %v", err)
 		return
 	}
+	log.Printf("Unmarshaled: %+v", event)
 
 	// Creates a client.
 	client, err := logging.NewClient(r.Context(), projectID)
