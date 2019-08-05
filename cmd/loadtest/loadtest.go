@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	addr       = flag.String("addr", "https://stats.spinnaker-test.net/spinnaker-telemetry", "")
+	addr       = flag.String("addr", "https://stats.spinnaker-test.net/log", "")
 	iterations = flag.Int("i", 10, "num iterations. Default to 10.")
 	delaySecs  = flag.Int("delaySecs", 3, "Seconds between requests")
 )
