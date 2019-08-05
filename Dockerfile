@@ -8,7 +8,7 @@ ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 ENV GOOS=linux
 
-RUN go install -mod=vendor cmd/server/main.go
+RUN go install cmd/server/main.go
 
 RUN ls -a /go/bin
 
