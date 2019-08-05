@@ -16,7 +16,6 @@ var cliPort = flag.Int("port", 8080, "Ignored if PORT is set as environmental va
 func main() {
 	flag.Parse()
 
-	http.HandleFunc("/", internal.LogEvent)
 	http.HandleFunc("/log", internal.LogEvent)
 
 	port := 0
