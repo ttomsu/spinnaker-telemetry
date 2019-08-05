@@ -11,6 +11,7 @@ import (
 	"cloud.google.com/go/functions/metadata"
 	"cloud.google.com/go/logging"
 	"github.com/golang/protobuf/jsonpb"
+
 	"github.com/spinnaker/proto/stats"
 )
 
