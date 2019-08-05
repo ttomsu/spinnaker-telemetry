@@ -1,17 +1,17 @@
 // Package p contains an HTTP Cloud Function.
-package stats
+package internal
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/jsonpb"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
-	"cloud.google.com/go/logging"
 	"cloud.google.com/go/functions/metadata"
-	"github.com/spinnaker/stats/proto"
+	"cloud.google.com/go/logging"
+	"github.com/golang/protobuf/jsonpb"
+	"github.com/spinnaker/proto/stats"
 )
 
 var (
@@ -39,7 +39,7 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlePost(w http.ResponseWriter, r *http.Request) {
-	event := &proto.Event{}
+	event := &stats.Event{}
 	um := &jsonpb.Unmarshaler{AllowUnknownFields: true}
 
 	defer r.Body.Close()
@@ -58,8 +58,8 @@ func handlePost(w http.ResponseWriter, r *http.Request) {
 
 	logger := client.Logger("spinnaker-log-event", logging.EntryCountThreshold(5))
 	entry := logging.Entry{
-		Payload: event,
-		Severity: logging.Info,
+		Payload:   event,
+		Severity:  logging.Info,
 		Timestamp: time.Now(),
 		HTTPRequest: &logging.HTTPRequest{
 			Request: r,

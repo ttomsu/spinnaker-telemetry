@@ -11,13 +11,13 @@ import (
 
 	"github.com/golang/protobuf/jsonpb"
 	ulid2 "github.com/oklog/ulid/v2"
-	"github.com/spinnaker/stats/proto"
+	"github.com/spinnaker/proto/stats"
 )
 
 var (
-	addr = flag.String("addr", "https://ttomsu-telemetry.spinnaker-test.net/spinnaker-telemetry", "")
+	addr       = flag.String("addr", "https://ttomsu-telemetry.spinnaker-test.net/spinnaker-telemetry", "")
 	iterations = flag.Int("i", 10, "num iterations. Default to 10.")
-	delaySecs = flag.Int("delaySecs", 3, "Seconds between requests")
+	delaySecs  = flag.Int("delaySecs", 3, "Seconds between requests")
 )
 
 func main() {
@@ -27,17 +27,17 @@ func main() {
 	appId := ulid()
 	pipelineId := ulid()
 
-	e := &proto.Event{
-		SpinnakerInstance: &proto.SpinnakerInstance{
+	e := &stats.Event{
+		SpinnakerInstance: &stats.SpinnakerInstance{
 			Id: instanceId,
-			Application: &proto.Application{
+			Application: &stats.Application{
 				Id: appId,
-				Pipeline: &proto.Pipeline{
+				Pipeline: &stats.Pipeline{
 					Id: pipelineId,
-					Stages: []*proto.Stage{
-						&proto.Stage{
+					Stages: []*stats.Stage{
+						&stats.Stage{
 							Id: "deploy",
-							CloudProvider: &proto.CloudProvider{
+							CloudProvider: &stats.CloudProvider{
 								Id: "gce",
 							},
 						},
@@ -54,7 +54,7 @@ func main() {
 	}
 
 	count := 0
-	t := time.NewTicker(time.Duration(*delaySecs)*time.Second)
+	t := time.NewTicker(time.Duration(*delaySecs) * time.Second)
 	for range t.C {
 		count++
 		if count > *iterations {

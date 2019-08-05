@@ -16,6 +16,6 @@ if [[ ":$PATH:" != *":${GOBIN}:"* ]]; then
 fi
 
 
-protoc --go_out=source_relative:. *.proto
+protoc --go_out=paths=source_relative:. *.proto
 popd
 
