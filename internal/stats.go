@@ -8,27 +8,32 @@ import (
 	"os"
 	"time"
 
-	"cloud.google.com/go/functions/metadata"
 	"cloud.google.com/go/logging"
 	"github.com/golang/protobuf/jsonpb"
 
 	"github.com/spinnaker/proto/stats"
 )
 
+const (
+	ENV_SERVICE = "K_SERVICE"
+	ENV_REVISION = "K_REVISION"
+	ENV_CONFIGURATION = "K_CONFIGURATION"
+)
+
 var (
 	projectID = os.Getenv("GCP_PROJECT")
+	envVars = []string{
+		ENV_SERVICE,
+		ENV_REVISION,
+		ENV_CONFIGURATION,
+	}
 )
 
 func LogEvent(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		log.Println("Received GET method for ", r.URL)
-		m, err := metadata.FromContext(r.Context())
-		if err != nil {
-			fmt.Fprint(w, "I'm healthy, but probably not running on GCF :-( ", err)
-			return
-		}
-		fmt.Fprintf(w, "I'm running on GCF! %+v", m)
+		handleGet(w, r)
 		return
 	case http.MethodPost:
 		log.Println("Received POST method for ", r.URL)
@@ -37,6 +42,13 @@ func LogEvent(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "405 - Method Not Allowed, punk!", http.StatusMethodNotAllowed)
 	}
 	fmt.Fprint(w, "Done.")
+}
+
+func handleGet(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "I'm healthy!\n")
+	for _, key := range envVars {
+		fmt.Fprintf(w, "%v: %v\n", key, os.Getenv(key))
+	}
 }
 
 func handlePost(w http.ResponseWriter, r *http.Request) {

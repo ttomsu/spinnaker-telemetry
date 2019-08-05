@@ -17,6 +17,7 @@ func main() {
 	flag.Parse()
 
 	http.HandleFunc("/", internal.LogEvent)
+	http.HandleFunc("/log", internal.LogEvent)
 
 	port := 0
 	envPort := os.Getenv("PORT")

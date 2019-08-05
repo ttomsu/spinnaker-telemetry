@@ -10,8 +10,6 @@ ENV GOOS=linux
 
 RUN go install cmd/server/main.go
 
-RUN ls -a /go/bin
-
 # -------
 
 FROM mirror.gcr.io/library/alpine
