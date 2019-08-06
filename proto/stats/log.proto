@@ -20,14 +20,33 @@ message Application {
 
 message Pipeline {
   string id = 1;
-  repeated Stage stages = 2;
+  Status status = 2;
+  repeated Stage stages = 3;
 }
 
 message Stage {
   string id =  1;
-  CloudProvider cloud_provider = 2;
+  Status status = 2;
+  CloudProvider cloud_provider = 3;
 }
 
 message CloudProvider {
   string id = 1;
+}
+
+// Yanked from https://github.com/spinnaker/orca/blob/master/orca-core/src/main/java/com/netflix/spinnaker/orca/ExecutionStatus.java
+enum Status {
+  UNKNOWN = 0;
+  NOT_STARTED = 1;
+  RUNNING = 2;
+  PAUSED = 3;
+  SUSPENDED = 4;
+  SUCCEEDED = 5;
+  FAILED_CONTINUE = 6;
+  TERMINAL = 7;
+  CANCELED = 8;
+  REDIRECT = 9;
+  STOPPED = 10;
+  SKIPPED = 11;
+  BUFFERED = 12;
 }
