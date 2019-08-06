@@ -76,10 +76,7 @@ func handlePost(w http.ResponseWriter, r *http.Request) {
 	entry := logging.Entry{
 		Payload:   event,
 		Severity:  logging.Info,
-		Timestamp: time.Now(),
-		HTTPRequest: &logging.HTTPRequest{
-			Request: r,
-		},
+		Timestamp: time.Now().UTC(),
 	}
 	logger.Log(entry)
 }

@@ -61,6 +61,7 @@ message Stage {
 
 message CloudProvider {
   string id = 1;
+  string variant = 2;
 }
 
 // Sourced from https://github.com/spinnaker/orca/blob/master/orca-core/src/main/java/com/netflix/spinnaker/orca/ExecutionStatus.java
