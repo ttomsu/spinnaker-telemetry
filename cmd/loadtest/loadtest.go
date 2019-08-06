@@ -19,40 +19,17 @@ var (
 	addr       = flag.String("addr", "https://stats.spinnaker-test.net/log", "")
 	iterations = flag.Int("i", 10, "num iterations. Default to 10.")
 	delaySecs  = flag.Int("delaySecs", 3, "Seconds between requests")
+	providers = []string{
+		"gce",
+		"aws",
+		"kubernetes",
+	}
 )
 
 func main() {
 	flag.Parse()
+	rand.Seed(time.Now().UnixNano())
 
-	instanceId := ulid()
-	appId := ulid()
-	pipelineId := ulid()
-
-	e := &stats.Event{
-		SpinnakerInstance: &stats.SpinnakerInstance{
-			Id: instanceId,
-			Application: &stats.Application{
-				Id: appId,
-				Pipeline: &stats.Pipeline{
-					Id: pipelineId,
-					Stages: []*stats.Stage{
-						&stats.Stage{
-							Id: "deploy",
-							CloudProvider: &stats.CloudProvider{
-								Id: "gce",
-							},
-						},
-					},
-				},
-			},
-		},
-	}
-
-	m := &jsonpb.Marshaler{}
-	js, err := m.MarshalToString(e)
-	if err != nil {
-		log.Fatalf("Could not convert to proto: %v", err)
-	}
 
 	count := 0
 	t := time.NewTicker(time.Duration(*delaySecs) * time.Second)
@@ -62,6 +39,36 @@ func main() {
 			return
 		}
 		log.Println("Iteration ", count)
+
+		instanceId := ulid()
+		appId := ulid()
+		pipelineId := ulid()
+
+		e := &stats.Event{
+			SpinnakerInstance: &stats.SpinnakerInstance{
+				Id: instanceId,
+				Application: &stats.Application{
+					Id: appId,
+					Pipeline: &stats.Pipeline{
+						Id: pipelineId,
+						Stages: []*stats.Stage{
+							{
+								Id: "deploy",
+								CloudProvider: &stats.CloudProvider{
+									Id: providers[rand.Intn(len(providers))],
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		m := &jsonpb.Marshaler{}
+		js, err := m.MarshalToString(e)
+		if err != nil {
+			log.Fatalf("Could not convert to proto: %v", err)
+		}
 
 		log.Printf("Sending to %v: %v\n", *addr, js)
 		resp, err := http.DefaultClient.Post(*addr, "application/json", bytes.NewBufferString(js))
