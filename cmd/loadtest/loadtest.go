@@ -67,7 +67,7 @@ func main() {
 		m := &jsonpb.Marshaler{}
 		js, err := m.MarshalToString(e)
 		if err != nil {
-			log.Fatalf("Could not convert to proto: %v", err)
+			log.Fatalf("Could not convert to string: %v", err)
 		}
 
 		log.Printf("Sending to %v: %v\n", *addr, js)
