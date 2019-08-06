@@ -18,6 +18,8 @@ const (
 	ENV_SERVICE = "K_SERVICE"
 	ENV_REVISION = "K_REVISION"
 	ENV_CONFIGURATION = "K_CONFIGURATION"
+
+	LOGGING_DELAY = 30 // seconds of delay before flushing any buffer.
 )
 
 var (
@@ -62,14 +64,15 @@ func handlePost(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Unmarshaled: %+v", event)
 
-	// Creates a client.
 	client, err := logging.NewClient(r.Context(), projectID)
 	if err != nil {
 		fmt.Fprintf(w, "could not create logging client: %v", err)
 		return
 	}
 
-	logger := client.Logger("spinnaker-log-event", logging.EntryCountThreshold(5))
+	logger := client.Logger("spinnaker-log-event",
+		logging.EntryCountThreshold(5),
+		logging.DelayThreshold(time.Duration(LOGGING_DELAY)*time.Second))
 	entry := logging.Entry{
 		Payload:   event,
 		Severity:  logging.Info,
