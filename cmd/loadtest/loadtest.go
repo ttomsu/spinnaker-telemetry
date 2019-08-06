@@ -49,7 +49,7 @@ func main() {
 				Id: instanceId,
 				Application: &stats.Application{
 					Id: appId,
-					Pipeline: &stats.Pipeline{
+					Execution: &stats.Execution{
 						Id: pipelineId,
 						Stages: []*stats.Stage{
 							{

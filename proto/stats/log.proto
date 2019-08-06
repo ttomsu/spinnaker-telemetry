@@ -16,18 +16,19 @@ message SpinnakerInstance {
 
 message Application {
   string id = 1;
-  Pipeline pipeline = 2;
+  Execution execution = 2;
 }
 
-message Pipeline {
+message Execution {
   string id = 1;
   Type type = 2;
 
   enum Type {
     UNKNOWN = 0;
-    STANDARD = 1;
-    MANAGED_TEMPLATE_V1 = 2;
-    MANAGED_TEMPLATE_V2 = 3;
+    PIPELINE = 1;
+    ORCHESTRATION = 2;
+    MANAGED_PIPELINE_TEMPLATE_V1 = 3;
+    MANAGED_PIPELINE_TEMPLATE_V2 = 4;
   }
 
   Trigger trigger = 3;
