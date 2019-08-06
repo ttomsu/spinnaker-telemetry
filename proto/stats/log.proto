@@ -54,7 +54,7 @@ message Execution {
 }
 
 message Stage {
-  string id =  1;
+  string type =  1;
   Status status = 2;
   CloudProvider cloud_provider = 3;
 }

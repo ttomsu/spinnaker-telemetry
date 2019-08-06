@@ -53,7 +53,7 @@ func main() {
 						Id: pipelineId,
 						Stages: []*stats.Stage{
 							{
-								Id: "deploy",
+								Type: "deploy",
 								CloudProvider: &stats.CloudProvider{
 									Id: providers[rand.Intn(len(providers))],
 								},
